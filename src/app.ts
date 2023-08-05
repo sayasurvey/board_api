@@ -1,12 +1,13 @@
-import express, { Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
+export const app: Application = express();
 
-const app = express();
-const port = 3000;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+app.use("/api", require("./router/index"));
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.get("/", (_req: Request, res: Response) => {
+  return res.status(200).send({
+    message: "Hello World!",
+  });
 });
