@@ -1,0 +1,33 @@
+version: "3"
+services:
+  node:
+    container_name: node_container
+    build:
+      context: ./Docker/node
+    ports:
+      - 3000:3000
+      - 4000:4000
+    volumes:
+      - ./src:/home/node/board_api/src
+    environment:
+      - NODE_ENV_DEVELOPMENT=development
+      - NODE_ENV_PRODUCTION=production
+    stdin_open: true
+    tty: true
+
+  postgres:
+    container_name: postgres_container
+    build: ./Docker/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - board-db-volume:/var/lib/postgresql/data
+    environment:
+      TZ: "Asia/Tokyo"
+      POSTGRES_DB: board_api_db
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+    hostname: postgres
+    restart: always
+volumes:
+  board-db-volume:
